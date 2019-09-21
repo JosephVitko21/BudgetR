@@ -15,11 +15,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final Button button = (Button) findViewById(R.id.button);
-        final TextView helloWorldLabel = (TextView) findViewById(R.id.helloWorldLabel );
+        final TextView helloWorldLabel = (TextView) findViewById(R.id.budgetRLabel);
         final Button activity2button = (Button) findViewById(R.id.activity2button);
+        final Button tutorialButton = (Button) findViewById(R.id.tutorialButton);
 
-        View.OnClickListener ocl;
-        ocl = new View.OnClickListener()
+        View.OnClickListener changeTextListener;
+        changeTextListener = new View.OnClickListener()
         {
 
             public void onClick(View v)
@@ -35,25 +36,40 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        View.OnClickListener newOcl;
-        newOcl = new View.OnClickListener()
+        View.OnClickListener a2Listener;
+        a2Listener = new View.OnClickListener()
         {
 
             public void onClick(View v)
             {
                 openActivity2();
-
-
             }
         };
 
-        button.setOnClickListener(ocl);
-        activity2button.setOnClickListener(newOcl);
+        View.OnClickListener tutListener;
+        tutListener = new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                openTutorial();
+            }
+        };
+
+        button.setOnClickListener(changeTextListener);
+        activity2button.setOnClickListener(a2Listener);
+        tutorialButton.setOnClickListener(tutListener);
     }
 
     public void openActivity2() {
 
         Intent intent = new Intent(this, page2test.class);
+        this.startActivity(intent);
+
+    }
+
+    public void openTutorial(){
+
+        Intent intent = new Intent(this, tutorialActivity.class);
         this.startActivity(intent);
 
     }
