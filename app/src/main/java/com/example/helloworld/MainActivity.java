@@ -24,9 +24,10 @@ public class MainActivity extends AppCompatActivity {
             {
                 if (helloWorldLabel.getVisibility() == View.INVISIBLE) {
                     helloWorldLabel.setVisibility(View.VISIBLE);
-                }
-                if (helloWorldLabel.getVisibility() == View.VISIBLE) {
+                } else {
+
                     helloWorldLabel.setVisibility(View.INVISIBLE);
+
                 }
 
             }
