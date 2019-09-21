@@ -1,13 +1,13 @@
 package com.example.helloworld;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
 public class tutorialActivity extends AppCompatActivity {
 
-    ViewPager viewPager;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
