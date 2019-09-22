@@ -1,6 +1,8 @@
 package com.example.helloworld;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
@@ -10,6 +12,9 @@ import android.content.Intent;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ViewPager viewPager;
+    CustomSwipeAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
         final TextView helloWorldLabel = (TextView) findViewById(R.id.budgetRLabel);
         final Button activity2button = (Button) findViewById(R.id.activity2button);
         final Button tutorialButton = (Button) findViewById(R.id.tutorialButton);
+
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        adapter = new CustomSwipeAdapter(this);
+        viewPager.setAdapter(adapter);
 
         View.OnClickListener changeTextListener;
         changeTextListener = new View.OnClickListener()

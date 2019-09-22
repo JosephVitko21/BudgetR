@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
     android:background="@color/cream"
 
+
     <TextView
         android:id="@+id/budgetRLabel"
         android:layout_width="wrap_content"
@@ -22,11 +23,11 @@
         android:textStyle="bold|italic"
         app:fontFamily="sans-serif"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.283" />
-
+        app:layout_constraintVertical_bias="0.206" />
 
     <Button
         android:id="@+id/button"
@@ -47,7 +48,7 @@
         android:id="@+id/activity2button"
         android:layout_width="230dp"
         android:layout_height="49dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="10dp"
         android:background="@color/money_green"
         android:text="@string/start_budgeting"
         android:textAllCaps="false"
@@ -56,8 +57,9 @@
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/budgetRLabel"
+        app:layout_constraintTop_toBottomOf="@+id/viewPager"
         app:layout_constraintVertical_bias="0.169" />
 
     <Button
@@ -92,6 +94,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="277dp"
+        android:layout_height="170dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/budgetRLabel"
+        app:layout_constraintVertical_bias="0.046" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
