@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 public class CustomSwipeAdapter extends PagerAdapter {
-    private int[] imageResources =  {R.drawable.naked_cat, R.drawable.naked_mole_rat1, R.drawable.naked_mole_rat2, R.drawable.naked_mole_rat3};
+    private int[] imageResources =  {R.drawable.app_slide1, R.drawable.naked_mole_rat1, R.drawable.naked_mole_rat2, R.drawable.naked_mole_rat3};
     private Context ctx;
     private LayoutInflater layoutInflater;
 
