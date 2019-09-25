@@ -10,4 +10,10 @@
     <color name="money_greenDarker">#1D2A22</color>
     <color name="money_greenLighter">#a2cfb2</color>
     <color name="white">#ffffff</color>
+
+    <color name="background_green">#335640</color>
+    <color name="background_navy">#0B3034</color>
+    <color name="accent_teal">#1BC8CA</color>
+    <color name="accent_red">#EB4D4A</color>
+    <color name="background_cream">#E7DEB8</color>
 </resources>

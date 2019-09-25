@@ -19,8 +19,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Button button = (Button) findViewById(R.id.button);
-        final TextView helloWorldLabel = (TextView) findViewById(R.id.budgetRLabel);
         final Button activity2button = (Button) findViewById(R.id.activity2button);
         final Button tutorialButton = (Button) findViewById(R.id.tutorialButton);
 
@@ -28,22 +26,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new CustomSwipeAdapter(this);
         viewPager.setAdapter(adapter);
 
-        View.OnClickListener changeTextListener;
-        changeTextListener = new View.OnClickListener()
-        {
-
-            public void onClick(View v)
-            {
-                if (helloWorldLabel.getVisibility() == View.INVISIBLE) {
-                    helloWorldLabel.setVisibility(View.VISIBLE);
-                } else {
-
-                    helloWorldLabel.setVisibility(View.INVISIBLE);
-
-                }
-
-            }
-        };
 
         View.OnClickListener a2Listener;
         a2Listener = new View.OnClickListener()
@@ -64,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        button.setOnClickListener(changeTextListener);
         activity2button.setOnClickListener(a2Listener);
         tutorialButton.setOnClickListener(tutListener);
     }
