@@ -4,10 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Button;
 import android.os.Bundle;
 import android.content.Intent;
+import me.relex.circleindicator.CircleIndicator;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,10 +21,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final Button activity2button = (Button) findViewById(R.id.activity2button);
         final Button tutorialButton = (Button) findViewById(R.id.tutorialButton);
+        final CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         adapter = new CustomSwipeAdapter(this);
         viewPager.setAdapter(adapter);
+
+        indicator.setViewPager(viewPager);
 
 
         View.OnClickListener a2Listener;

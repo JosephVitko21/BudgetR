@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import me.relex.circleindicator.CircleIndicator;
+
 public class CustomSwipeAdapter extends PagerAdapter {
     private int[] imageResources =  {R.drawable.app_slide1, R.drawable.app_slide2, R.drawable.app_slide3};
     private Context ctx;
@@ -36,9 +38,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = layoutInflater.inflate(R.layout.swipe_layout,container,false);
         ImageView imageView = (ImageView)itemView.findViewById(R.id.imageView);
-        TextView textView = (TextView)itemView.findViewById(R.id.image_count);
         imageView.setImageResource(imageResources[position]);
-        textView.setText("Image: + " + position);
         container.addView(itemView);
         return itemView;
     }
