@@ -4,29 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/money_green"
+    android:background="@drawable/tutorial_background"
     tools:context=".tutorialActivity">
+
+    <Button
+        android:id="@+id/end_tutorial_button"
+        android:layout_width="200dp"
+        android:layout_height="39dp"
+        android:background="@color/accent_teal"
+        android:text="End Tutorial"
+        android:textColor="@color/cream"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.692" />
+
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/indicator"
+        android:layout_width="402dp"
+        android:layout_height="142dp"
+        app:ci_drawable="@drawable/white_radius_circle_indicator"
+        app:ci_drawable_unselected="@drawable/black_radius_circle_indicator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.879" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
-        android:layout_width="403dp"
-        android:layout_height="351dp"
+        android:layout_width="wrap_content"
+        android:layout_height="464dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.042" />
+        app:layout_constraintVertical_bias="0.042" >
 
-    <me.relex.circleindicator.CircleIndicator
-        android:id="@+id/indicator"
-        android:layout_width="410dp"
-        android:layout_height="231dp"
-        android:layout_marginTop="76dp"
-        app:layout_constraintBottom_toTopOf="@+id/tutorialButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewPager"
-        app:layout_constraintVertical_bias="1.0" />
+    </androidx.viewpager.widget.ViewPager>
+
+    <TextView
+        android:id="@+id/position_label"
+        android:layout_width="84dp"
+        android:layout_height="22dp"
+        android:text="Position: 0"
+        tools:layout_editor_absoluteX="172dp"
+        tools:layout_editor_absoluteY="686dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

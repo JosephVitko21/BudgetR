@@ -43,23 +43,23 @@
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
-        android:layout_width="wrap_content"
-        android:layout_height="180dp"
+        android:layout_width="233dp"
+        android:layout_height="181dp"
         app:layout_constraintBottom_toTopOf="@+id/tutorialButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.301" />
 
     <me.relex.circleindicator.CircleIndicator
         android:id="@+id/indicator"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         app:layout_constraintBottom_toTopOf="@+id/tutorialButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewPager"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -70,7 +70,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/budgetr_home_logo" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
