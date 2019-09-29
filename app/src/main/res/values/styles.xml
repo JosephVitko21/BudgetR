@@ -4,14 +4,14 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/cream</item>
-        <item name="colorPrimaryDark">@color/background_green</item>
+        <item name="colorPrimaryDark">@color/background_navy</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="HomeTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/cream</item>
-        <item name="colorPrimaryDark">@color/background_green</item>
+        <item name="colorPrimaryDark">@color/background_navy</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
