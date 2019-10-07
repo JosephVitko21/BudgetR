@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".page2test">
+    tools:context=".page2test"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="This is activity 2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <include
+        layout="@layout/toolbar_layout"></include>
 
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Back to Page 1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.016" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:id="@+id/tabs"
+        android:background="@color/money_green"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:tabTextColor="#FFF"
+        app:tabSelectedTextColor="@color/colorAccent"
+        />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/tabbedPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
