@@ -13,14 +13,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.tabs.ui.main.SectionsPagerAdapter;
+import com.example.helloworld.ui.main.SectionsPagerAdapter;
 
-public class page2test extends AppCompatActivity {
+public class Main2Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -33,8 +33,7 @@ public class page2test extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-
-
             }
         });
     }
+}
