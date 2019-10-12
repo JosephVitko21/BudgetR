@@ -19,13 +19,7 @@ import android.widget.Toast;
  */
 public class DemoFragment extends Fragment {
 
-    string name;
-    int budgetNumber;
 
-    EditText nameInput;
-    EditText budgetInput;
-
-    Button beginButton;
 
 
     private TextView textView;
@@ -33,15 +27,7 @@ public class DemoFragment extends Fragment {
 
     public DemoFragment() {
 
-        nameInput = (EditText) findViewById(R.idea.nameInput);
-        budgetInput = (EditText) findViewById(R.idea.budgetInput);
 
-        beginButton = (Button) findViewById(R.id.begin);
-        beginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                name = nameInput.getText().toString();
-                budgetNumber = Integer.valueOf(budgetInput.getText().toString());
 
             }
 
