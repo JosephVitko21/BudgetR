@@ -16,8 +16,8 @@ public class FirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab1, container, false);
 
-        TextView tv = (TextView) v.findViewById(R.id.tvFragFirst);
-        tv.setText(getArguments().getString("msg"));
+        TextView tv5 = (TextView) v.findViewById(R.id.textView5);
+        TextView tv6 = (TextView) v.findViewById(R.id.textView6);
 
         return v;
     }
