@@ -10,22 +10,19 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:text="My Dashboard "
-        android:textSize="30sp"
         android:textColor="@color/background_green"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.051"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.096" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="6dp"
-        tools:layout_editor_absoluteY="84dp"
-        android:textColor="@color/white"/>
+        android:entries="@array/planets_array"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="131dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
