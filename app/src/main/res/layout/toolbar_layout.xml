@@ -5,7 +5,7 @@
     android:background="@color/money_green"
     android:id="@+id/toolBar"
     android:elevation="4dp"
-    android:theme="@style/HomeTheme"
+    android:theme="@style/AppTheme"
     >
 
 </androidx.appcompat.widget.Toolbar>

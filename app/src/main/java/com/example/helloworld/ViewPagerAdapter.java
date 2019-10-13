@@ -14,6 +14,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
+
     @Override
     public Fragment getItem(int pos) {
         switch(pos) {
@@ -36,23 +37,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
 
-        position = position+1;
-        if(position==1){
-            return "Home";
-        }
-        if(position==2){
-            return "Expenses";
-        }
-        if(position==3){
-            return "Add";
-        }
-        if(position==4){
-            return "Graphs";
-        }
-        if(position==5){
-            return "Settings";
-        }else{
             return null;
-        }
     }
+
+
+
 }
