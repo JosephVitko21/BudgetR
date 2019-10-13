@@ -23,14 +23,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 1: return SecondFragment.newInstance("SecondFragment, Instance 1");
             case 2: return ThirdFragment.newInstance("ThirdFragment, Instance 1");
             case 3: return FourthFragment.newInstance("FourthFragment, Instance 2");
-            case 4: return FifthFragment.newInstance("FifthFragment, Instance 3");
             default: return ThirdFragment.newInstance("FirstFragment, Default");
         }
     }
 
     @Override
     public int getCount() {
-        return 5;
+        return 4;
     }
 
     @Nullable
