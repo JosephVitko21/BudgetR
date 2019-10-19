@@ -19,24 +19,34 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int pos) {
         switch(pos) {
 
-            case 0: return FirstFragment.newInstance("FirstFragment, Instance 1");
-            case 1: return SecondFragment.newInstance("SecondFragment, Instance 1");
-            case 2: return ThirdFragment.newInstance("ThirdFragment, Instance 1");
-            case 3: return FourthFragment.newInstance("FourthFragment, Instance 2");
+            case 0: return FirstFragment.newInstance("Home Page (FirstFragment)");
+            case 1: return SecondFragment.newInstance("Expenses Page (SecondFragment)");
+            case 2: return ThirdFragment.newInstance("Data Page (ThirdFragment)");
             default: return ThirdFragment.newInstance("FirstFragment, Default");
         }
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
 
+        position = position+1;
+        if(position==1){
+            return "Home";
+        }
+        if(position==2){
+            return "Expenses";
+        }
+        if(position==3){
+            return "Data";
+        } else{
             return null;
+        }
     }
 
 

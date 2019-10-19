@@ -7,4 +7,23 @@
     android:elevation="4dp"
     android:theme="@style/AppTheme">
 
+    <RelativeLayout
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:id="@+id/add_expense_icon"
+        android:clickable="true"
+        android:gravity="center"/>
+
+
+    <ImageButton
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/add_expense_button"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="end"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/plus_white"/>
+
+
 </androidx.appcompat.widget.Toolbar>
