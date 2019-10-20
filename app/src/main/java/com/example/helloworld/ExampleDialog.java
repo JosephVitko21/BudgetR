@@ -3,6 +3,7 @@ package com.example.helloworld;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,22 +22,9 @@ public class ExampleDialog extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         builder.setView(inflater.inflate(R.layout.custom_dialog_layout, null));
-        builder.setPositiveButton("Sign in", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
 
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-
-
-
-        return builder.create();
+        AlertDialog dialogS = builder.create();
+        dialogS.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        return dialogS;
     }
 }

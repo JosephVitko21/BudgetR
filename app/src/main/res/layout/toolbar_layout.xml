@@ -23,7 +23,8 @@
         android:layout_centerVertical="true"
         android:layout_gravity="end"
         android:layout_marginRight="16dp"
-        android:background="@drawable/plus_white"/>
+        android:background="@drawable/plus_white"
+        android:elevation="6dp"/>
 
 
 </androidx.appcompat.widget.Toolbar>
