@@ -13,15 +13,23 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.Html;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.BaseInputConnection;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -34,6 +42,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
+import java.text.NumberFormat;
+import java.util.Calendar;
 
 
 public class page2test extends AppCompatActivity {
@@ -61,6 +71,14 @@ public class page2test extends AppCompatActivity {
     private ImageButton scanReceiptButton;
     private ImageButton cameraButton;
     private ImageButton photoButton;
+    private TextView manualEntryLabel;
+    private EditText manualEntryInput;
+    private Button manualNextButton;
+    private int counter;
+    private String inputText;
+    private String line;
+    private String tempCostString;
+    private AutoCompleteTextView manualAutoComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +152,8 @@ public class page2test extends AppCompatActivity {
             }
         };
         addButton.setOnClickListener(addListener);
+
+
     }
 
     private void displayMessage(String message){
@@ -181,13 +201,174 @@ public class page2test extends AppCompatActivity {
         inflater = this.getLayoutInflater();
         dialogView = inflater.inflate(R.layout.custom_dialog_layout, null);
         dialogS.setView(dialogView);
+        dialogS.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         enterManualButton = (ImageButton) dialogView.findViewById(R.id.enter_manual_button);
         enterManualButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                dialogS.dismiss();
+                manualLayout = inflater.inflate(R.layout.manual_entry_dialog, null);
+                dialogS.setContentView(manualLayout);
+                dialogS.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+
+                manualNextButton = (Button) manualLayout.findViewById(R.id.manual_next_button);
+                manualEntryInput = (EditText) manualLayout.findViewById(R.id.manual_entry_input);
+                manualEntryLabel = (TextView) manualLayout.findViewById(R.id.manual_entry_label);
+                manualAutoComplete = (AutoCompleteTextView) manualLayout.findViewById(R.id.manual_auto_complete);
+
+                manualEntryInput.clearFocus();
+                BaseInputConnection  mInputConnection = new BaseInputConnection(manualLayout, true);
+                mInputConnection.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+                manualEntryInput.getText().clear();
+                manualEntryLabel.setText("Enter the Location of your Expense");
+                manualEntryInput.requestFocus();
+                mInputConnection.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+
+                StringBuilder sb = new StringBuilder();
+
+                final String[] labels = new String[4];
+                labels[0] = "Enter the Location or Website of your Expense";
+                labels[1] = "Enter the Total Cost of your Expense";
+                labels[2] = "Enter the Date of your Expense";
+                labels[3] = "Category (Food, Transportation, Personal, Entertainment, Other);";
+                counter = 0;
+
+                line = "";
+
+                final TextWatcher tw = new TextWatcher() {
+                    private String current = "";
+                    private String mmddyyyy = "MMDDYYYY";
+                    private Calendar cal = Calendar.getInstance();
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (!s.toString().equals(current)) {
+                            String clean = s.toString().replaceAll("[^\\d.]|\\.", "");
+                            String cleanC = current.replaceAll("[^\\d.]|\\.", "");
+
+                            int cl = clean.length();
+                            int sel = cl;
+                            for (int i = 2; i <= cl && i < 6; i += 2) {
+                                sel++;
+                            }
+                            //Fix for pressing delete next to a forward slash
+                            if (clean.equals(cleanC)) sel--;
+
+                            if (clean.length() < 8){
+                                clean = clean + mmddyyyy.substring(clean.length());
+                            }else{
+                                //This part makes sure that when we finish entering numbers
+                                //the date is correct, fixing it otherwise
+                                int day  = Integer.parseInt(clean.substring(2,4));
+                                int mon  = Integer.parseInt(clean.substring(0,2));
+                                int year = Integer.parseInt(clean.substring(4,8));
+
+                                mon = mon < 1 ? 1 : mon > 12 ? 12 : mon;
+                                cal.set(Calendar.MONTH, mon-1);
+                                year = (year<1900)?1900:(year>2100)?2100:year;
+                                cal.set(Calendar.YEAR, year);
+                                // ^ first set year for the line below to work correctly
+                                //with leap years - otherwise, date e.g. 29/02/2012
+                                //would be automatically corrected to 28/02/2012
+
+                                day = (day > cal.getActualMaximum(Calendar.DATE))? cal.getActualMaximum(Calendar.DATE):day;
+                                clean = String.format("%02d%02d%02d",mon, day, year);
+                            }
+
+                            clean = String.format("%s/%s/%s", clean.substring(0, 2),
+                                    clean.substring(2, 4),
+                                    clean.substring(4, 8));
+
+                            sel = sel < 0 ? 0 : sel;
+                            current = clean;
+                            manualEntryInput.setText(current);
+                            manualEntryInput.setSelection(sel < current.length() ? sel : current.length());
+                        }
+                    }
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                };
+                final TextWatcher tw2 = new TextWatcher() {
+
+                    private String current = "";
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if(!s.toString().equals(current)){
+                            manualEntryInput.removeTextChangedListener(this);
+
+                            String cleanString = s.toString().replaceAll("[$,.]", "");
+
+                            double parsed = Double.parseDouble(cleanString);
+                            String formatted = NumberFormat.getCurrencyInstance().format((parsed/100));
+
+                            current = formatted;
+                            manualEntryInput.setText(formatted);
+                            manualEntryInput.setSelection(formatted.length());
+
+                            manualEntryInput.addTextChangedListener(this);
+                            tempCostString = manualEntryInput.getText().toString();
+                        }
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                };
+
+
+                manualNextButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        counter = counter + 1;
+                        if(counter == 4){
+                            String inputText = manualEntryInput.getText().toString();
+                            line = buildString(line, inputText, counter);
+                            displayMessage(line);
+                            dialogS.dismiss();
+                        }else if(counter==1) {
+
+                            manualEntryInput.addTextChangedListener(tw2);
+                            String inputText = manualEntryInput.getText().toString();
+                            line = buildString(line, inputText, counter);
+                            displayMessage(line);
+                            manualEntryInput.getText().clear();
+                            manualEntryLabel.setText(labels[counter]);
+
+                        }else if(counter==2){
+                            manualEntryInput.removeTextChangedListener(tw2);
+                            manualEntryInput.addTextChangedListener(tw);
+                            String inputText = manualEntryInput.getText().toString().substring(1);
+                            line = buildString(line, inputText, counter);
+                            displayMessage(line);
+                            manualEntryInput.getText().clear();
+                            manualEntryLabel.setText(labels[counter]);
+
+                        }else{
+                            manualEntryInput.removeTextChangedListener(tw);
+                            manualEntryInput.removeTextChangedListener(tw2);
+                            manualEntryInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                            String inputText = manualEntryInput.getText().toString();
+                            line = buildString(line, inputText, counter);
+                            displayMessage(line);
+                            manualEntryInput.getText().clear();
+                            manualEntryLabel.setText(labels[counter]);
+                        }
+
+
+
+
+                    }
+                });
+
 
             }
         });
@@ -220,13 +401,9 @@ public class page2test extends AppCompatActivity {
             }
         });
 
-        dialogS.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
 
         return dialogS;
     }
-
-
 
 
     public void camera(Dialog dialog){
@@ -249,23 +426,41 @@ public class page2test extends AppCompatActivity {
         scanDisplayImage = (ImageView) findViewById(R.id.scan_display_image);
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-        scanDisplayImage.setImageBitmap(bitmap);
-//        switch(requestCode) {
-//            case 0:
-//                if(resultCode == RESULT_OK){
-//                    bitmap = (Bitmap)data.getExtras().get("data");
-//                    scanDisplayImage.setImageBitmap(bitmap);
-//                    displayMessage("Image successfully loaded");
-//                }
-//
-//                break;
-//            case 1:
-//                if(resultCode == RESULT_OK){
-//                    bitmap = (Bitmap)data.getExtras().get("data");
-//                    scanDisplayImage.setImageBitmap(bitmap);
-//                    displayMessage("Image successfully loaded");
-//                }
-//                break;
-//        }
+        switch(requestCode) {
+            case 0:
+                if(resultCode == RESULT_OK){
+                    scanDisplayImage.setImageBitmap(bitmap);
+                    displayMessage("Image taken successfully loaded");
+                }
+
+                break;
+            case 1:
+                if(resultCode == RESULT_OK){
+                    scanDisplayImage.setImageBitmap(bitmap);
+                    displayMessage("Image selected successfully loaded");
+                }
+                break;
+        }
     }
+
+    public String buildString(String originalString, String input, int lineNumber){
+        if(lineNumber==1){
+            StringBuilder sb = new StringBuilder();
+            sb.append(originalString);
+            sb.append(input.toLowerCase());
+            String updatedString = sb.toString();
+            return updatedString;
+        }else{
+            StringBuilder sb = new StringBuilder();
+            sb.append(originalString);
+            sb.append(",");
+            sb.append(input.toLowerCase());
+            String updatedString = sb.toString();
+            return updatedString;
+        }
+
+
+
+    }
+
 }
