@@ -1,12 +1,10 @@
 package com.example.helloworld;
 
 import androidx.fragment.app.Fragment;
-import android.content.Context;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -16,8 +14,8 @@ public class FirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab1, container, false);
 
-        TextView tv5 = (TextView) v.findViewById(R.id.textView5);
-        TextView tv6 = (TextView) v.findViewById(R.id.textView6);
+        TextView tv5 = (TextView) v.findViewById(R.id.dashTitle);
+
 
         return v;
     }
