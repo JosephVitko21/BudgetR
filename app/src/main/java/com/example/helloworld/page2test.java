@@ -14,14 +14,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.Html;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -34,6 +38,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.TextView;
+import android.graphics.BitmapFactory;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -41,9 +46,15 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.googlecode.tesseract.android.TessBaseAPI;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -82,6 +93,8 @@ public class page2test extends AppCompatActivity {
     private String line;
     private String tempCostString;
     private AutoCompleteTextView manualAutoComplete;
+    private TextView messageView;
+    private Button clearFileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +168,14 @@ public class page2test extends AppCompatActivity {
             }
         };
         addButton.setOnClickListener(addListener);
+
+        clearFileButton = (Button) findViewById(R.id.clear_file_button);
+        clearFileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearFile();
+            }
+        });
 
 
     }
@@ -338,6 +359,7 @@ public class page2test extends AppCompatActivity {
                             displayMessage(line);
                             try{
                                 commitToFile(line);
+                                readMessage();
                             }catch (IOException e){
                             }
                             dialogS.dismiss();
@@ -472,15 +494,67 @@ public class page2test extends AppCompatActivity {
 
     private void commitToFile(String expenseString) throws IOException {
 
-        FileOutputStream fOut = openFileOutput("savedData.csv",
-                MODE_APPEND);
-        OutputStreamWriter osw = new OutputStreamWriter(fOut);
-        osw.write(expenseString);
-        osw.write("\n");
-        osw.flush();
-        osw.close();
+        String message = expenseString + "\n";
+        String fileName = "hello_file";
+        try {
+            FileOutputStream fileOutputStream = openFileOutput(fileName, MODE_APPEND);
+            fileOutputStream.write(message.getBytes());
+            fileOutputStream.close();
+            displayMessage("Message Saved");
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+//        FileOutputStream fOut = openFileOutput("savedData.csv",
+//                MODE_APPEND);
+//        OutputStreamWriter osw = new OutputStreamWriter(fOut);
+//        osw.write(expenseString);
+//        osw.write("\n");
+//        osw.flush();
+//        osw.close();
 
 
     }
+
+    public void readMessage(){
+        try {
+            messageView = (TextView) findViewById(R.id.messageView);
+            String message;
+            FileInputStream fileInputStream = openFileInput("hello_file");
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuffer stringBuffer = new StringBuffer();
+            message = bufferedReader.readLine();
+            stringBuffer.append(message + "\n");
+            messageView.setText(stringBuffer.toString());
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void clearFile(){
+
+        String message = "";
+        String fileName = "hello_file";
+        try {
+            FileOutputStream fileOutputStream = openFileOutput(fileName, MODE_PRIVATE);
+            fileOutputStream.write(message.getBytes());
+            fileOutputStream.close();
+            displayMessage("File Cleared");
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+    }
+
 
 }

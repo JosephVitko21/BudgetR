@@ -33,4 +33,17 @@
         android:src="@drawable/naked_cat"
         />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear File"
+        android:id="@+id/clear_file_button"/>
+
+    <TextView
+        android:id="@+id/messageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+
 </LinearLayout>
