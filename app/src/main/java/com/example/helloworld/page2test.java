@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -46,6 +47,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -53,7 +55,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -94,6 +98,9 @@ public class page2test extends AppCompatActivity {
     private AutoCompleteTextView manualAutoComplete;
     private TextView messageView;
     private Button clearFileButton;
+    Bitmap image;
+    private TessBaseAPI mTess;
+    String datapath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +175,19 @@ public class page2test extends AppCompatActivity {
         };
         addButton.setOnClickListener(addListener);
 
-
+        clearFileButton = (Button) findViewById(R.id.clear_file_button);
+//        clearFileButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                clearFile();
+//            }
+//        });
+        image = BitmapFactory.decodeResource(getResources(), R.drawable.budgetr_home_logo);
+        String language = "eng";
+        datapath = getFilesDir()+ "/tesseract/";
+        mTess = new TessBaseAPI();
+        checkFile(new File(datapath + "tessdata/"));
+        mTess.init(datapath, language);
 
 
     }
@@ -445,6 +464,7 @@ public class page2test extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        scanDisplayImage = (ImageView) findViewById(R.id.scan_display_image);
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = (Bitmap)data.getExtras().get("data");
         switch(requestCode) {
@@ -513,6 +533,7 @@ public class page2test extends AppCompatActivity {
 
     public void readMessage(){
         try {
+            messageView = (TextView) findViewById(R.id.messageView);
             String message;
             FileInputStream fileInputStream = openFileInput("hello_file");
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
@@ -529,7 +550,7 @@ public class page2test extends AppCompatActivity {
 
     }
 
-    public void clearFile(){
+    public void clearFile(View view){
 
         String message = "";
         String fileName = "hello_file";
@@ -538,6 +559,7 @@ public class page2test extends AppCompatActivity {
             fileOutputStream.write(message.getBytes());
             fileOutputStream.close();
             displayMessage("File Cleared");
+            readMessage();
         }catch (FileNotFoundException e){
             e.printStackTrace();
         } catch (IOException e){
@@ -546,6 +568,53 @@ public class page2test extends AppCompatActivity {
 
 
     }
+
+    private void checkFile(File dir) {
+        if (!dir.exists()&& dir.mkdirs()){
+            copyFiles();
+        }
+        if(dir.exists()) {
+            String datafilepath = datapath+ "/tessdata/eng.traineddata";
+            File datafile = new File(datafilepath);
+            if (!datafile.exists()) {
+                copyFiles();
+            }
+        }
+    }
+
+    private void copyFiles() {
+        try {
+            String filepath = datapath + "/tessdata/eng.traineddata";
+            AssetManager assetManager = getAssets();
+            InputStream instream = assetManager.open("tessdata/eng.traineddata");
+            OutputStream outstream = new FileOutputStream(filepath);
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = instream.read(buffer)) != -1) {
+                outstream.write(buffer, 0, read);
+            }
+            outstream.flush();
+            outstream.close();
+            instream.close();
+            File file = new File(filepath);
+            if (!file.exists()) {
+                throw new FileNotFoundException();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void runOCR(View view){
+        String OCRresult = null;
+        mTess.setImage(image);
+        OCRresult = mTess.getUTF8Text();
+        messageView = (TextView) findViewById(R.id.messageView);;
+        messageView.setText(OCRresult);
+    }
+
 
 
 }
