@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-        <string-array name="planets_array">
+        <string-array name="time_array">
             <item>Today</item>
-            <item>Week</item>
-            <item>Month</item>
-            <item>Past Month</item>
-            <item>Year</item>
+            <item>This week</item>
+            <item>This month</item>
+            <item>Last month</item>
+            <item>In the past six months</item>
+            <item>Last year</item>
         </string-array>
+
+        <string-array name="categories_array">
+            <item>all categories</item>
+            <item>transportation</item>
+            <item>personal</item>
+            <item>food</item>
+            <item>entertainment</item>
+            <item>other</item>
+      </string-array>
+
 
 </resources>

@@ -15,7 +15,7 @@ public class FirstFragment extends Fragment {
         View v = inflater.inflate(R.layout.tab1, container, false);
 
         TextView tv5 = (TextView) v.findViewById(R.id.dashTitle);
-
+        TextView tv6 = (TextView) v.findViewById(R.id.textView6);
 
         return v;
     }
