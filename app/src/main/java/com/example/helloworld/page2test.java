@@ -42,6 +42,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.NumberFormat;
 import java.util.Calendar;
 
@@ -333,6 +336,10 @@ public class page2test extends AppCompatActivity {
                             String inputText = manualEntryInput.getText().toString();
                             line = buildString(line, inputText, counter);
                             displayMessage(line);
+                            try{
+                                commitToFile(line);
+                            }catch (IOException e){
+                            }
                             dialogS.dismiss();
                         }else if(counter==1) {
 
@@ -459,6 +466,19 @@ public class page2test extends AppCompatActivity {
             return updatedString;
         }
 
+
+
+    }
+
+    private void commitToFile(String expenseString) throws IOException {
+
+        FileOutputStream fOut = openFileOutput("savedData.csv",
+                MODE_APPEND);
+        OutputStreamWriter osw = new OutputStreamWriter(fOut);
+        osw.write(expenseString);
+        osw.write("\n");
+        osw.flush();
+        osw.close();
 
 
     }
