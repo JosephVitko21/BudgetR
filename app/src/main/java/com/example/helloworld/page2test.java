@@ -46,7 +46,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
-import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -169,13 +168,7 @@ public class page2test extends AppCompatActivity {
         };
         addButton.setOnClickListener(addListener);
 
-        clearFileButton = (Button) findViewById(R.id.clear_file_button);
-        clearFileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearFile();
-            }
-        });
+
 
 
     }
@@ -452,7 +445,6 @@ public class page2test extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        scanDisplayImage = (ImageView) findViewById(R.id.scan_display_image);
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = (Bitmap)data.getExtras().get("data");
         switch(requestCode) {
@@ -521,7 +513,6 @@ public class page2test extends AppCompatActivity {
 
     public void readMessage(){
         try {
-            messageView = (TextView) findViewById(R.id.messageView);
             String message;
             FileInputStream fileInputStream = openFileInput("hello_file");
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
