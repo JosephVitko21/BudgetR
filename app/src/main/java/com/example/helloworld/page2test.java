@@ -8,15 +8,22 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.TextView;
 
@@ -45,6 +52,15 @@ public class page2test extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ImageButton addButton;
+    private ImageView scanDisplayImage;
+    private LayoutInflater inflater;
+    private View dialogView;
+    private View scanLayout;
+    private View manualLayout;
+    private ImageButton enterManualButton;
+    private ImageButton scanReceiptButton;
+    private ImageButton cameraButton;
+    private ImageButton photoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,8 +134,6 @@ public class page2test extends AppCompatActivity {
             }
         };
         addButton.setOnClickListener(addListener);
-
-
     }
 
     private void displayMessage(String message){
@@ -148,10 +162,110 @@ public class page2test extends AppCompatActivity {
 
     private void addExpense(){
 
-        ExampleDialog exampleDialog = new ExampleDialog();
-        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+//        ExampleDialog exampleDialog = new ExampleDialog();
+//        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+
+        Dialog dialog = onCreateDialog();
+        dialog.show();
 
 
 
+    }
+
+    public Dialog onCreateDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final AlertDialog dialogS = builder.create();
+
+        inflater = this.getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.custom_dialog_layout, null);
+        dialogS.setView(dialogView);
+
+        enterManualButton = (ImageButton) dialogView.findViewById(R.id.enter_manual_button);
+        enterManualButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogS.dismiss();
+
+            }
+        });
+        scanReceiptButton = (ImageButton) dialogView.findViewById(R.id.scan_receipt_button);
+        scanReceiptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanLayout = inflater.inflate(R.layout.scan_add_layout, null);
+                dialogS.setContentView(scanLayout);
+
+                cameraButton = (ImageButton) scanLayout.findViewById(R.id.camera_button);
+                photoButton = (ImageButton) scanLayout.findViewById(R.id.photo_button);
+
+                cameraButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        camera(dialogS);
+                    }
+                });
+
+                photoButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        gallery(dialogS);
+                    }
+                });
+
+
+
+            }
+        });
+
+        dialogS.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+
+        return dialogS;
+    }
+
+
+
+
+    public void camera(Dialog dialog){
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePicture, 0);//zero can be replaced with any action code (called requestCode)
+        dialog.dismiss();
+
+    }
+
+    public void gallery(Dialog dialog){
+
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
+        dialog.dismiss();
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        scanDisplayImage = (ImageView) findViewById(R.id.scan_display_image);
+        super.onActivityResult(requestCode, resultCode, data);
+        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+        scanDisplayImage.setImageBitmap(bitmap);
+//        switch(requestCode) {
+//            case 0:
+//                if(resultCode == RESULT_OK){
+//                    bitmap = (Bitmap)data.getExtras().get("data");
+//                    scanDisplayImage.setImageBitmap(bitmap);
+//                    displayMessage("Image successfully loaded");
+//                }
+//
+//                break;
+//            case 1:
+//                if(resultCode == RESULT_OK){
+//                    bitmap = (Bitmap)data.getExtras().get("data");
+//                    scanDisplayImage.setImageBitmap(bitmap);
+//                    displayMessage("Image successfully loaded");
+//                }
+//                break;
+//        }
     }
 }
