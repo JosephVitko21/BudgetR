@@ -101,6 +101,7 @@ public class page2test extends AppCompatActivity {
     Bitmap image;
     private TessBaseAPI mTess;
     String datapath = "";
+    private Button confirmInfoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +176,6 @@ public class page2test extends AppCompatActivity {
         };
         addButton.setOnClickListener(addListener);
 
-        clearFileButton = (Button) findViewById(R.id.clear_file_button);
 //        clearFileButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -464,21 +464,20 @@ public class page2test extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        scanDisplayImage = (ImageView) findViewById(R.id.scan_display_image);
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = (Bitmap)data.getExtras().get("data");
         switch(requestCode) {
             case 0:
                 if(resultCode == RESULT_OK){
-                    scanDisplayImage.setImageBitmap(bitmap);
-                    displayMessage("Image taken successfully loaded");
+                    Dialog dialog = confirmDialog();
+                    dialog.show();
                 }
 
                 break;
             case 1:
                 if(resultCode == RESULT_OK){
-                    scanDisplayImage.setImageBitmap(bitmap);
-                    displayMessage("Image selected successfully loaded");
+                    Dialog dialog = confirmDialog();
+                    dialog.show();
                 }
                 break;
         }
@@ -533,7 +532,6 @@ public class page2test extends AppCompatActivity {
 
     public void readMessage(){
         try {
-            messageView = (TextView) findViewById(R.id.messageView);
             String message;
             FileInputStream fileInputStream = openFileInput("hello_file");
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
@@ -541,7 +539,6 @@ public class page2test extends AppCompatActivity {
             StringBuffer stringBuffer = new StringBuffer();
             message = bufferedReader.readLine();
             stringBuffer.append(message + "\n");
-            messageView.setText(stringBuffer.toString());
         }catch (FileNotFoundException e){
             e.printStackTrace();
         } catch (IOException e){
@@ -611,8 +608,33 @@ public class page2test extends AppCompatActivity {
         String OCRresult = null;
         mTess.setImage(image);
         OCRresult = mTess.getUTF8Text();
-        messageView = (TextView) findViewById(R.id.messageView);;
         messageView.setText(OCRresult);
+    }
+
+    public Dialog confirmDialog(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final AlertDialog dialog = builder.create();
+
+        inflater = this.getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.confirm_dialog_layout, null);
+
+        dialog.setView(dialogView);
+
+        confirmInfoButton = (Button) dialogView.findViewById(R.id.ConfirmInfoButton);
+        confirmInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                displayMessage("Data successfully enetered!");
+
+            }
+        });
+
+        return dialog;
+
+
     }
 
 

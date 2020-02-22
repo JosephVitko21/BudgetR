@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#2D6971</color>
     <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryDarkLighter">#00806f</color>
     <color name="colorAccent">#D81B60</color>
     <color name="actionBarText">#FFF</color>
 </resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OcrTestActivity"
+    android:orientation="vertical">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ocr_test_button"
+        android:textAlignment="center"
+        android:text="Take Picture"
+        />
+
+    <Button
+        android:id="@+id/ocr_test_gallery_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose Picture"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/ocr_test_blank_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scan an Image"
+        android:textAlignment="center" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:id="@+id/ocr_test_result"
+        />
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ocr_test_image"
+        />
+
+
+
+
+</LinearLayout>

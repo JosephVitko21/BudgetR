@@ -24,25 +24,6 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/activity2button"
-        android:layout_width="103dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/background_navy"
-        android:text="skip to app"
-        android:textAllCaps="false"
-        android:textColor="@color/cream"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        android:elevation="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.948"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="233dp"
@@ -74,6 +55,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/budgetr_home_logo"
         android:elevation="8dp"/>
+
+    <Button
+        android:id="@+id/test_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Testing"
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="627dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

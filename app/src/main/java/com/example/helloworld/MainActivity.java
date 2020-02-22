@@ -17,18 +17,20 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     CustomSwipeAdapter adapter;
+    private Button testButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Button activity2button = (Button) findViewById(R.id.activity2button);
         final Button tutorialButton = (Button) findViewById(R.id.tutorialButton);
         final CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         adapter = new CustomSwipeAdapter(this);
         viewPager.setAdapter(adapter);
+
+        testButton = findViewById(R.id.test_button);
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onClick(View v)
             {
-                openActivity2();
+                openTest();
             }
         };
 
@@ -55,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        activity2button.setOnClickListener(a2Listener);
         tutorialButton.setOnClickListener(tutListener);
+        testButton.setOnClickListener(a2Listener);
     }
 
     public void openActivity2() {
@@ -68,7 +70,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void openTutorial(){
 
-        Intent intent = new Intent(this, tutorialActivity.class);
+        Intent intent = new Intent(this, page2test.class);
+        this.startActivity(intent);
+
+    }
+
+    public void openTest(){
+
+        Intent intent = new Intent(this, TestDirectoryActivity.class);
         this.startActivity(intent);
 
     }
