@@ -9,9 +9,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
@@ -40,7 +42,13 @@ public class ImagePicker extends BottomSheetDialogFragment {
             @
                     Override
             public void onClick(View view) {
+
+                Log.d("PERMISSIONS", "Write Perm: " + (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)));
+                Log.d("PERMISSIONS", "Activity: " + getActivity());
+
+
                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(),"The app was not allowed to read your store.", Toast.LENGTH_LONG).show();
                     requestPermissions(new String[]{
                             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
                     }, 2000);

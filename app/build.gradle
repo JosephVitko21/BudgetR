@@ -36,7 +36,7 @@ dependencies {
     implementation 'com.amazonaws:aws-android-sdk-appsync:2.6.+'
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
-    implementation 'com.github.bumptech.glide:glide:3.6.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
 
 
 }

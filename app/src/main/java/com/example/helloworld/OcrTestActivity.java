@@ -1,8 +1,11 @@
 package com.example.helloworld;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompatExtras;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
@@ -17,6 +20,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -28,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Context;
 
+import com.bumptech.glide.Glide;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.io.File;
@@ -36,6 +41,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 
 
 import static java.security.AccessController.getContext;
@@ -47,6 +53,7 @@ public class OcrTestActivity extends AppCompatActivity {
     private Button galleryButton;
     private TextView resultText;
     private TextView blankText;
+    private TextView totalText;
     private Context context;
 
     private static final int CAMERA_REQUEST = 1888;
@@ -66,6 +73,9 @@ public class OcrTestActivity extends AppCompatActivity {
     String datapath = "";
     private Button confirmInfoButton;
 
+    private static final int IMAG_PICK_CODE = 1000;
+    private static final int PERMISSION_CODE = 1001;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,53 +88,38 @@ public class OcrTestActivity extends AppCompatActivity {
         galleryButton = findViewById(R.id.ocr_test_gallery_button);
         resultText = findViewById(R.id.ocr_test_result);
         blankText = findViewById(R.id.ocr_test_blank_text);
+        totalText = findViewById(R.id.total_text);
+
 
         photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imagePicker = new ImagePicker(new ImagePicker.GetImage() {
-                    @Override
-                    public void setGalleryImage(Uri imageUri) {
 
-                        Log.i("ImageURI", imageUri + "");
-
-                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                        Cursor cursor = getContentResolver().query(imageUri, filePathColumn, null, null, null);
-                        assert cursor != null;
-                        cursor.moveToFirst();
-
-                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                        mediaPath = cursor.getString(columnIndex);
-                        // Set the Image in ImageView for Previewing the Media
-                        imageView.setImageBitmap(BitmapFactory.decodeFile(mediaPath));
-                        cursor.close();
-
-                    }
-
-                    @Override
-                    public void setCameraImage(String filePath) {
-
-                        mediaPath =filePath;
-                        Glide.with(getContext()).load(filePath).into(imageView);
-
-                    }
-
-                    @Override
-                    public void setImageFile(File file) {
-
-                        cameraImage = file;
-
-                    }
-                }, true);
-                imagePicker.show(getActivity().getSupportFragmentManager(), imagePicker.getTag());
             }
         });
 
         galleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage();
+                // check runtime permissions
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                            PackageManager.PERMISSION_DENIED) {
+                        //permission not granted, request it
+                        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                        //show popup for runtime permission
+                        requestPermissions(permissions, PERMISSION_CODE);
+
+                    }
+                    else {
+                        //permission already granted
+                        pickImageFromGallery();
+
+                    }
+                } else {
+                    // system os is less then marshmallow
+                    pickImageFromGallery();
+                }
             }
         });
 
@@ -209,13 +204,29 @@ public class OcrTestActivity extends AppCompatActivity {
         OCRresult.replaceAll("\\p{C}", "?");
         displayMessage(OCRresult);
 
+
         if(OCRresult == null){
             blankText.setText("Image Read:");
             resultText.setText("No text found!");
         } else{
             blankText.setText("Image Read:");
             resultText.setText(OCRresult);
+            String totalLine= new String();
+            String lines[] = OCRresult.split("\\r?\\n");
+            Log.d("Output", Integer.toString(lines.length));
+            for (int i = 0; i < lines.length; i++){
+                String line = lines[i].toLowerCase();
+                Log.d("Output", "Line: " + line);
+                if (line.contains("total")){
+                    totalLine = line;
+                }
+            }
+            String total = totalLine.replaceAll("[^\\d.]", "");
+            totalText.setText("Total: " + total);
+            Log.d("Output", total);
         }
+
+
     }
 
     private void checkFile(File dir) {
@@ -286,140 +297,52 @@ public class OcrTestActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void pickImageFromGallery() {
+        //intent to pick image
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAG_PICK_CODE);
 
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
-        {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(photo);
-            runOCR(photo);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISSION_CODE:{
+                if (grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    //permission was granted
+                    pickImageFromGallery();
+                } else {
+                    //permission was denied
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        displayMessage(Integer.toString(requestCode));
-//
-//        if (resultCode == RESULT_OK) {
-//
-//            if (requestCode == 1) {
-//
-//                //h=0;
-//                File f = new File(Environment.getExternalStorageDirectory().toString());
-//
-//                for (File temp : f.listFiles()) {
-//
-//                    if (temp.getName().equals("temp.jpg")) {
-//
-//                        f = temp;
-//                        File photo = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
-//                        //pic = photo;
-//                        break;
-//
-//                    }
-//
-//                }
-//
-//                try {
-//
-//                    Bitmap bitmap;
-//
-//                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-//
-//
-//                    bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
-//
-//                            bitmapOptions);
-//
-//
-//                    imageView.setImageBitmap(bitmap);
-//
-//
-//                    String path = android.os.Environment
-//
-//                            .getExternalStorageDirectory()
-//
-//                            + File.separator
-//
-//                            + "Phoenix" + File.separator + "default";
-//                    //p = path;
-//
-//                    f.delete();
-//
-//                    OutputStream outFile = null;
-//
-//                    File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
-//
-//                    try {
-//
-//                        outFile = new FileOutputStream(file);
-//
-//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
-//                        //pic=file;
-//                        outFile.flush();
-//
-//                        outFile.close();
-//
-//
-//                    } catch (FileNotFoundException e) {
-//
-//                        e.printStackTrace();
-//
-//                    } catch (IOException e) {
-//
-//                        e.printStackTrace();
-//
-//                    } catch (Exception e) {
-//
-//                        e.printStackTrace();
-//
-//                    }
-//
-//                } catch (Exception e) {
-//
-//                    e.printStackTrace();
-//
-//                }
-//
-//            } else if (requestCode == 2) {
-//
-//
-//                Uri selectedImage = data.getData();
-//                // h=1;
-//                //imgui = selectedImage;
-//                String[] filePath = {MediaStore.Images.Media.DATA};
-//
-//                Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
-//
-//                c.moveToFirst();
-//
-//                int columnIndex = c.getColumnIndex(filePath[0]);
-//
-//                String picturePath = c.getString(columnIndex);
-//
-//                c.close();
-//
-//                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-//
-//
-//                Log.w("path", picturePath + "");
-//
-//
-//                imageView.setImageBitmap(thumbnail);
-//
-//            }
-//
-//        }else{
-//
-//            displayMessage("Problem with result code" + resultCode);
-//
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == IMAG_PICK_CODE){
+            // set image to image view
+            Uri imageUri = data.getData();
+            imageView.setImageURI(imageUri);
+            Bitmap bitmap;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                bitmap = ARGBBitmap(bitmap);
+                runOCR(bitmap);
+            }catch (Exception e){
+                Log.d("Error", "onActivityResult: Problem converting image");
+                }
+        }
+    }
+
+    private Bitmap ARGBBitmap(Bitmap img) {
+        return img.copy(Bitmap.Config.ARGB_8888,true);
+    }
+
 
 
 
