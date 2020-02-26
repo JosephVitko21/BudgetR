@@ -76,6 +76,7 @@ public class OcrTestActivity extends AppCompatActivity {
     private static final int IMAG_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +95,25 @@ public class OcrTestActivity extends AppCompatActivity {
         photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (checkSelfPermission(Manifest.permission.CAMERA) ==
+                            PackageManager.PERMISSION_DENIED) {
+                        //permission not granted, request it
+                        String[] permissions = {Manifest.permission.CAMERA};
+                        //show popup for runtime permission
+                        requestPermissions(permissions, MY_CAMERA_PERMISSION_CODE);
+
+                    }
+                    else {
+                        //permission already granted
+                        takePicture();
+
+                    }
+                } else {
+                    // system os is less then marshmallow
+                    takePicture();
+                }
 
             }
         });
@@ -142,56 +162,6 @@ public class OcrTestActivity extends AppCompatActivity {
 
 
     }
-
-
-    private void selectImage() {
-
-
-
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
-
-
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(OcrTestActivity.this);
-        builder.setTitle("Add Photo!");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-
-            @Override
-
-            public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take Photo"))
-                {
-                        takePicture();
-                }
-
-                else if (options[item].equals("Choose from Gallery"))
-
-                {
-
-                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                    startActivityForResult(intent, 2);
-
-
-
-                }
-
-                else if (options[item].equals("Cancel")) {
-
-                    dialog.dismiss();
-
-                }
-
-            }
-
-        });
-
-        builder.show();
-
-    }
-
-
 
 
     public void runOCR(Bitmap image){
@@ -267,29 +237,6 @@ public class OcrTestActivity extends AppCompatActivity {
         }
     }
 
-    private File savebitmap(Bitmap bmp) {
-        String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
-        OutputStream outStream = null;
-        // String temp = null;
-        File file = new File(extStorageDirectory, "temp.png");
-        if (file.exists()) {
-            file.delete();
-            file = new File(extStorageDirectory, "temp.png");
-
-        }
-
-        try {
-            outStream = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-            outStream.flush();
-            outStream.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        return file;
-    }
 
     private void displayMessage(String message){
 
@@ -308,6 +255,7 @@ public class OcrTestActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d("Output", "Request code: " + requestCode);
         switch (requestCode){
             case PERMISSION_CODE:{
                 if (grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -317,6 +265,17 @@ public class OcrTestActivity extends AppCompatActivity {
                     //permission was denied
                     Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
                 }
+            }
+            case MY_CAMERA_PERMISSION_CODE:{
+                    if (grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    {
+                        //permission was granted
+                        takePicture();
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+                    }
             }
         }
     }
@@ -336,6 +295,20 @@ public class OcrTestActivity extends AppCompatActivity {
             }catch (Exception e){
                 Log.d("Error", "onActivityResult: Problem converting image");
                 }
+        }
+        else if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST){
+            // set image to image view
+            Uri imageUri = data.getData();
+            imageView.setImageURI(imageUri);
+            Bitmap bitmap;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                bitmap = ARGBBitmap(bitmap);
+                runOCR(bitmap);
+            }catch (Exception e){
+                Log.d("Error", "onActivityResult: Problem converting image");
+            }
+
         }
     }
 
