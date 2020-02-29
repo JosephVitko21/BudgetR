@@ -102,6 +102,7 @@ public class page2test extends AppCompatActivity {
     private TessBaseAPI mTess;
     String datapath = "";
     private Button confirmInfoButton;
+    private ImageView imageView3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +176,8 @@ public class page2test extends AppCompatActivity {
             }
         };
         addButton.setOnClickListener(addListener);
+
+        imageView3 = findViewById(R.id.imageView3);
 
 //        clearFileButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -466,6 +469,8 @@ public class page2test extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+        imageView3 = findViewById(R.id.imageView3);
+        imageView3.setImageBitmap(bitmap);
         switch(requestCode) {
             case 0:
                 if(resultCode == RESULT_OK){

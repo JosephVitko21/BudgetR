@@ -298,17 +298,9 @@ public class OcrTestActivity extends AppCompatActivity {
         }
         else if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST){
             // set image to image view
-            Uri imageUri = data.getData();
-            imageView.setImageURI(imageUri);
-            Bitmap bitmap;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                bitmap = ARGBBitmap(bitmap);
-                runOCR(bitmap);
-            }catch (Exception e){
-                Log.d("Error", "onActivityResult: Problem converting image");
-            }
-
+            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+            imageView.setImageBitmap(bitmap);
+            runOCR(bitmap);
         }
     }
 
